@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HexPanel">
+      <HintPath>..\..\..\..\..\..\Bin\Reference Assemblies\HexPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="Keyboard.KbdBtn">
+      <HintPath>..\..\..\..\..\..\Bin\Reference Assemblies\Keyboard.KbdBtn.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,323 @@
+﻿<Window x:Class="HexKeyboard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hx="clr-namespace:HexPanel;assembly=HexPanel"
+        xmlns:kbd="clr-namespace:Keyboard.KbdBtn;assembly=Keyboard.KbdBtn"
+        xmlns:local="clr-namespace:HexKeyboard"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Images.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <hx:HexClipConverter x:Key="ClipConverter"/>
+
+            <Style TargetType="{x:Type local:HexKebboardBtn}">
+                <Setter Property="Background" Value="CornflowerBlue"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="local:HexKebboardBtn">
+                            <Grid Name="hexBorder" Background="{TemplateBinding BorderBrush}">
+                                <Grid.Clip>
+                                    <MultiBinding Converter="{StaticResource ClipConverter}">
+                                        <Binding Path="ActualWidth" ElementName="hexBorder"/>
+                                        <Binding Path="ActualHeight" ElementName="hexBorder"/>
+                                        <Binding Path="Orientation" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    </MultiBinding>
+                                </Grid.Clip>
+
+                                <Grid Name="hexContent"                              
+                                    Background="{TemplateBinding Background}" Margin="{TemplateBinding BorderThickness}" 
+                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <Grid.Clip>
+                                        <MultiBinding Converter="{StaticResource ClipConverter}">
+                                            <Binding Path="ActualWidth" ElementName="hexContent"/>
+                                            <Binding Path="ActualHeight" ElementName="hexContent"/>
+                                            <Binding Path="Orientation" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </Grid.Clip>
+
+                                    <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              ClipToBounds="True"
+
+                                              Margin="{TemplateBinding Padding}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                </Grid>
+                            </Grid>
+                            <!--<ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="BorderBrush" Value="Gold"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>-->
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+
+    </Window.Resources>
+    <Grid x:Name="MainGrid" FocusManager.FocusedElement="{Binding ElementName=Text}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0" FontSize="16" TextWrapping="Wrap" AcceptsReturn="True" Name="Text"/>
+        
+        <hx:HexGrid Grid.Column="1" RowCount="7" ColumnCount="7" Orientation="Horizontal" Name="alphaGrid" Visibility="Visible">
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="0" Content="0,0"/>
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="1" Content="0,1"/>
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="2" Content="0,2"/>-->
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="3" KeyBehaviour="None" Content=" " Background="DarkGray"/>
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="4" Content="0,4"/>
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="5" Content="0,5"/>
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="6" Content="0,6"/>-->
+
+            <!--<local:HexKebboardBtn Grid.Row="1" Grid.Column="0" Content="1,0"/>-->
+
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="1" KeyBehaviour="VirtualKey" KeyCode="VkK" Content="K"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="k"
+                                  local:KeyProperties.ModifiedContent="K"/>
+
+
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="2" KeyBehaviour="Chord" Content="?">
+                <local:HexKebboardBtn.ChordModifiers>
+                    <kbd:VirtualKeyCode>Shift</kbd:VirtualKeyCode>
+                </local:HexKebboardBtn.ChordModifiers>
+                <local:HexKebboardBtn.ChordKeys>
+                    <kbd:VirtualKeyCode>Oem2</kbd:VirtualKeyCode>
+                </local:HexKebboardBtn.ChordKeys>
+            </local:HexKebboardBtn>
+            
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkC" Content="C"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="c"
+                                  local:KeyProperties.ModifiedContent="C"/>
+            
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkZ" Content="Z"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="z"
+                                  local:KeyProperties.ModifiedContent="Z"/>
+            
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="5" KeyBehaviour="None"  Content=" " Background="DarkGray"/>
+            <!--<local:HexKebboardBtn Grid.Row="1" Grid.Column="6" Content="1,6"/>-->
+
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="0" KeyBehaviour="VirtualKey" KeyCode="Return" Padding="10">
+                <Image Source="{StaticResource Return}"/>
+            </local:HexKebboardBtn>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="1" KeyBehaviour="VirtualKey" KeyCode="VkW" Content="W"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="w"
+                                  local:KeyProperties.ModifiedContent="W"/>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="2" KeyBehaviour="VirtualKey" KeyCode="VkH" Content="H"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="h"
+                                  local:KeyProperties.ModifiedContent="H"/>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkI" Content="I"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="i"
+                                  local:KeyProperties.ModifiedContent="I"/>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkG" Content="G"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="g"
+                                  local:KeyProperties.ModifiedContent="G"/>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="5" KeyBehaviour="VirtualKey" KeyCode="VkV" Content="V"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="v"
+                                  local:KeyProperties.ModifiedContent="V"/>
+            
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="6" KeyBehaviour="None" Content=" " Background="DarkGray"/>
+
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="0" KeyBehaviour="VirtualKey" KeyCode="OemPeriod"  Content="."
+                                  local:KeyProperties.SensitivityType="Shift" 
+                                  local:KeyProperties.UnmodifiedContent="."
+                                  local:KeyProperties.ModifiedContent="&lt;"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="1" KeyBehaviour="VirtualKey" KeyCode="VkS" Content="S"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="s"
+                                  local:KeyProperties.ModifiedContent="S"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="2" KeyBehaviour="VirtualKey" KeyCode="VkT" Content="T"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="t"
+                                  local:KeyProperties.ModifiedContent="T"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkE" Content="E"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="e"
+                                  local:KeyProperties.ModifiedContent="E"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkN" Content="N"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="n"
+                                  local:KeyProperties.ModifiedContent="K"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="5" KeyBehaviour="VirtualKey" KeyCode="VkD" Content="D"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="d"
+                                  local:KeyProperties.ModifiedContent="D"/>
+            
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="6" KeyBehaviour="VirtualKey" KeyCode="VkX" Content="X"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="x"
+                                  local:KeyProperties.ModifiedContent="X"/>
+
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="0" KeyBehaviour="None" Content=".?123" Click="KebboardSwapClick"/>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="1" KeyBehaviour="InstantaneousModifier" KeyCode="Shift" Padding="10">
+                <Image Source="{StaticResource Shift}"/>
+            </local:HexKebboardBtn>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="2" KeyBehaviour="VirtualKey" KeyCode="Space" Padding="10">
+                <Image Source="{StaticResource Space}"/>
+            </local:HexKebboardBtn>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkA" Content="A"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="a"
+                                  local:KeyProperties.ModifiedContent="A"/>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkO" Content="O"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="o"
+                                  local:KeyProperties.ModifiedContent="O"/>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="5" KeyBehaviour="VirtualKey" KeyCode="VkU" Content="U"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="u"
+                                  local:KeyProperties.ModifiedContent="U"/>
+            
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="6" KeyBehaviour="VirtualKey" KeyCode="VkJ" Content="J"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="j"
+                                  local:KeyProperties.ModifiedContent="J"/>
+
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="0" KeyBehaviour="VirtualKey" KeyCode="OemComa" Content=","
+                                  local:KeyProperties.SensitivityType="Shift" 
+                                  local:KeyProperties.UnmodifiedContent=","
+                                  local:KeyProperties.ModifiedContent="&gt;"/>
+
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="1" KeyBehaviour="VirtualKey" KeyCode="VkY" Content="Y"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="y"
+                                  local:KeyProperties.ModifiedContent="Y"/>
+            
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="2" KeyBehaviour="VirtualKey" KeyCode="Back" Padding="10">
+                <Image Source="{StaticResource Backspace}"/>
+            </local:HexKebboardBtn>
+            
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkL" Content="L"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="l"
+                                  local:KeyProperties.ModifiedContent="L"/>
+            
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkR" Content="R"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="r"
+                                  local:KeyProperties.ModifiedContent="R"/>
+            
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="5" KeyBehaviour="VirtualKey" KeyCode="VkF" Content="F"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="f"
+                                  local:KeyProperties.ModifiedContent="F"/>
+            
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="6" KeyBehaviour="VirtualKey" KeyCode="VkQ" Content="Q"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="q"
+                                  local:KeyProperties.ModifiedContent="Q"/>
+
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="0" Content="6,0"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="1" Content="6,1"/>-->
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="2" KeyBehaviour="VirtualKey" KeyCode="VkM" Content="M"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="m"
+                                  local:KeyProperties.ModifiedContent="M"/>
+            
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="3" KeyBehaviour="VirtualKey" KeyCode="VkB" Content="B"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="b"
+                                  local:KeyProperties.ModifiedContent="N"/>
+            
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="4" KeyBehaviour="VirtualKey" KeyCode="VkP" Content="P"
+                                  local:KeyProperties.SensitivityType="Caps" 
+                                  local:KeyProperties.UnmodifiedContent="p"
+                                  local:KeyProperties.ModifiedContent="P"/>
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="5" Content="6,5"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="6" Content="6,6"/>-->
+        </hx:HexGrid>
+        
+        <hx:HexGrid Grid.Column="1" RowCount="7" ColumnCount="7" Orientation="Horizontal" Name="symbolGrid" Visibility="Collapsed">
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="0" Content="0,0"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="1" Content="0,1"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="2" Content="0,2"/>-->
+            <local:HexKebboardBtn Grid.Row="0" Grid.Column="3" Content="0" />
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="4" Content="0,4"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="5" Content="0,5"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="0" Grid.Column="6" Content="0,6"/>-->
+
+            <!--<local:HexKebboardBtn Grid.Row="1" Grid.Column="0" Content="1,0"/>-->
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="1" Content="4"/>
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="2" Content="1"/>
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="3" Content="2"/>
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="4" Content="3"/>
+            <local:HexKebboardBtn Grid.Row="1" Grid.Column="5" Content="8"/>
+            <!--<local:HexKebboardBtn Grid.Row="1" Grid.Column="6" Content="1,6"/>-->
+
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="0" Content="@"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="1" Content="#"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="2" Content="5"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="3" Content="6"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="4" Content="7"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="5" Content="-"/>
+            <local:HexKebboardBtn Grid.Row="2" Grid.Column="6" Content="*" />
+
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="0" Content="&amp;"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="1" Content=";"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="2" Content="$"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="3" Content="9"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="4" Content="+"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="5" Content="/"/>
+            <local:HexKebboardBtn Grid.Row="3" Grid.Column="6" Content="="/>
+
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="0" KeyBehaviour="None" Content="ABC" Click="KebboardSwapClick"/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="1" Content="&apos;"/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="2" Content="("/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="3" Content=")"/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="4" Content="%"/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="5" Content="_"/>
+            <local:HexKebboardBtn Grid.Row="4" Grid.Column="6" Content="|"/>
+
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="0" Content="&quot;"/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="1" Content="["/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="2" Content="]"/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="3" Content="{}}"/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="4" Content="\"/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="5" Content="~"/>
+            <local:HexKebboardBtn Grid.Row="5" Grid.Column="6" Content="`"/>
+
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="0" Content="6,0"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="1" Content="6,1"/>-->
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="2" Content="{}{"/>
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="3" Content="!"/>
+            <local:HexKebboardBtn Grid.Row="6" Grid.Column="4" Content="^"/>
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="5" Content="6,5"/>-->
+            <!--<local:HexKebboardBtn Grid.Row="6" Grid.Column="6" Content="6,6"/>-->
+        </hx:HexGrid>
+    </Grid>
+</Window>
